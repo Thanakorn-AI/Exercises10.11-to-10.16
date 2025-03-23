@@ -13,13 +13,16 @@ const useSignIn = () => {
       variables: { credentials: { username, password } },
     });
 
+    // Log the result to verify it contains the access token
+    console.log('Mutation result in useSignIn:', data);
+
     const accessToken = data?.authenticate?.accessToken;
     if (accessToken) {
       await authStorage.setAccessToken(accessToken);
       apolloClient.resetStore();
     }
 
-    return data;
+    return { data };  // Return an object with data property
   };
 
   return [signIn, result];

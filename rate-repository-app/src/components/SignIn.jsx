@@ -1,12 +1,12 @@
 // rate-repository-app/src/components/SignIn.jsx
-const { View, TextInput, Pressable, StyleSheet } = require('react-native');
-const { useFormik } = require('formik');
-const { useNavigate } = require('react-router-native');
+const { View, TextInput, Pressable, StyleSheet } = require("react-native");
+const { useFormik } = require("formik");
+const { useNavigate } = require("react-router-native");
 
-const Text = require('./Text');
-const theme = require('../theme');
-const yup = require('yup');
-const useSignIn = require('../hooks/useSignIn');
+const Text = require("./Text");
+const theme = require("../theme");
+const yup = require("yup");
+const useSignIn = require("../hooks/useSignIn");
 
 const styles = StyleSheet.create({
   container: {
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     padding: 15,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 5,
   },
   errorText: {
@@ -36,13 +36,13 @@ const styles = StyleSheet.create({
 });
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required('Username is required'),
-  password: yup.string().required('Password is required'),
+  username: yup.string().required("Username is required"),
+  password: yup.string().required("Password is required"),
 });
 
 const SignInForm = ({ onSubmit }) => {
   const formik = useFormik({
-    initialValues: { username: '', password: '' },
+    initialValues: { username: "", password: "" },
     validationSchema,
     onSubmit,
   });
@@ -50,8 +50,8 @@ const SignInForm = ({ onSubmit }) => {
   const showErrors = () => {
     return (
       formik.isSubmitting ||
-      formik.values.username !== '' ||
-      formik.values.password !== ''
+      formik.values.username !== "" ||
+      formik.values.password !== ""
     );
   };
 
@@ -60,11 +60,14 @@ const SignInForm = ({ onSubmit }) => {
       <TextInput
         style={[
           styles.input,
-          showErrors() && formik.touched.username && formik.errors.username && styles.inputError,
+          showErrors() &&
+            formik.touched.username &&
+            formik.errors.username &&
+            styles.inputError,
         ]}
         placeholder="Username"
         value={formik.values.username}
-        onChangeText={formik.handleChange('username')}
+        onChangeText={formik.handleChange("username")}
       />
       {showErrors() && formik.touched.username && formik.errors.username && (
         <Text style={styles.errorText}>{formik.errors.username}</Text>
@@ -72,11 +75,14 @@ const SignInForm = ({ onSubmit }) => {
       <TextInput
         style={[
           styles.input,
-          showErrors() && formik.touched.password && formik.errors.password && styles.inputError,
+          showErrors() &&
+            formik.touched.password &&
+            formik.errors.password &&
+            styles.inputError,
         ]}
         placeholder="Password"
         value={formik.values.password}
-        onChangeText={formik.handleChange('password')}
+        onChangeText={formik.handleChange("password")}
         secureTextEntry
       />
       {showErrors() && formik.touched.password && formik.errors.password && (
@@ -99,8 +105,9 @@ const SignIn = () => {
     const { username, password } = values;
 
     try {
-      await signIn({ username, password });
-      navigate('/'); // Redirect to repositories list
+      const { data } = await signIn({ username, password });
+      console.log("Authentication result:", data); // This should show the access token
+      navigate("/"); // Redirect to repositories list
     } catch (e) {
       console.log(e);
     }
